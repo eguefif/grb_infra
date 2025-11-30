@@ -1,0 +1,29 @@
+services:
+  nginx:
+    image: eguefif/grb-amateur:nginx-latest
+    ports:
+      - "80:80"
+      - "443:443"
+    secrets:
+      - grb-amateur.space.pem
+      - private.key
+
+    depends_on:
+      - backend
+
+    networks:
+      - grb_default
+
+  backend:
+    image: eguefif/grb-amateur:backend-latest
+    secrets:
+      - backend-secrets
+    networks:
+      - grb_default
+
+  alertsys:
+    image: eguefif/grb-amateur:alertsys-latest
+    secrets:
+      - alertsys-secrets
+    networks:
+      - grb_default
