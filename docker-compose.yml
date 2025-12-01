@@ -6,7 +6,7 @@ services:
     depends_on:
       - backend
     networks:
-      - grb_default
+      - default
 
   backend:
     image: eguefif/grb-amateur:backend-latest
@@ -15,7 +15,7 @@ services:
     secrets:
       - backend-secrets
     networks:
-      - grb_default
+      - default
 
   alertsys:
     image: eguefif/grb-amateur:alertsys-latest
@@ -24,11 +24,11 @@ services:
     depends_on:
       - backend
     networks:
-      - grb_default
+      - default
 
 networks:
-  grb_default:
-    external: true
+  default:
+    driver: overlay
 
 secrets:
   backend-secrets:
