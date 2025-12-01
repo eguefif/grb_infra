@@ -1,5 +1,5 @@
 start-services:
-    docker stack deploy grb
+    docker stack deploy -c docker-compose.yml --with-registry-auth grb
 
 stop-services:
     docker stack rm grb
