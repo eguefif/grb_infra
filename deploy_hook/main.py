@@ -50,7 +50,7 @@ def deploy_backend(verify: VerifyDep):
     handle_return(ret.returncode, "frontend")
 
 def handle_return(ret, service):
-    if ret.returncode == 0:
+    if ret == 0:
         print(f"{service} deploy OK")
         return f"{service} update ok"
     else:
