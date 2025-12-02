@@ -1,5 +1,5 @@
 from typing import Annotated, Optional
-from fastapi import FastAPI, Depends, Request, Header
+from fastapi import FastAPI, Depends, Request, Header, HTTPException
 import subprocess
 import os
 
@@ -25,12 +25,7 @@ def deploy_alertsys(verify: VerifyDep):
     command = "docker service update --update-delay=10s --with-registry-auth --image eguefif/grb-amateur:alertsys-latest grb_alertsys".split(" ")
     print("Update alertsys")
     ret = subprocess.run(command)
-    if ret.returncode == 0:
-        print("Alertsys deploy OK")
-        return "ok"
-    else:
-        print("Alertsys deploy Failure")
-        return "error"
+    handle_return(ret.returncode, "alertsys")
 
 @app.get("/deploy/backend")
 def deploy_backend(verify: VerifyDep):
@@ -41,12 +36,7 @@ def deploy_backend(verify: VerifyDep):
     command = "docker service update --update-delay=10s --with-registry-auth --image eguefif/grb-amateur:backend-latest grb_backend".split(" ")
     print("Update backend")
     ret = subprocess.run(command)
-    if ret.returncode == 0:
-        print("Alertsys deploy OK")
-        return "ok"
-    else:
-        print("Alertsys deploy Failure")
-        return "error"
+    handle_return(ret.returncode, "backend")
 
 @app.get("/deploy/frontend")
 def deploy_backend(verify: VerifyDep):
@@ -57,9 +47,12 @@ def deploy_backend(verify: VerifyDep):
     command = "docker service update --update-delay=10s --with-registry-auth --image eguefif/grb-amateur:nginx-latest grb_nginx".split(" ")
     print("Update frontend")
     ret = subprocess.run(command)
+    handle_return(ret.returncode, "frontend")
+
+def handle_return(ret, service):
     if ret.returncode == 0:
-        print("Alertsys deploy OK")
-        return "ok"
+        print(f"{service} deploy OK")
+        return f"{service} update ok"
     else:
-        print("Alertsys deploy Failure")
-        return "error"
+        print(f"{service} deploy Failure")
+        raise HTTPException(status_code=500, detail=f"Impossible to update service {service}")
