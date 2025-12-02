@@ -19,29 +19,47 @@ VerifyDep = Annotated[bool, Depends(verify_origin)]
 
 @app.get("/deploy/alertsys")
 def deploy_alertsys(verify: VerifyDep):
+    print("Receive trigger for alertsys deploy")
     if not verify:
         return "not authorized"
     command = "docker service update --update-delay=10s --with-registry-auth --image eguefif/grb-amateur:alertsys-latest grb_alertsys".split(" ")
     print("Update alertsys")
-    subprocess.run(command)
-    return "ok"
+    ret = subprocess.run(command)
+    if ret.returncode == 0:
+        print("Alertsys deploy OK")
+        return "ok"
+    else:
+        print("Alertsys deploy Failure")
+        return "error"
 
 @app.get("/deploy/backend")
 def deploy_backend(verify: VerifyDep):
+    print("Receive trigger for backend deploy")
     if not verify:
         return "not authorized"
 
     command = "docker service update --update-delay=10s --with-registry-auth --image eguefif/grb-amateur:backend-latest grb_backend".split(" ")
     print("Update backend")
-    subprocess.run(command)
-    return "ok"
+    ret = subprocess.run(command)
+    if ret.returncode == 0:
+        print("Alertsys deploy OK")
+        return "ok"
+    else:
+        print("Alertsys deploy Failure")
+        return "error"
 
 @app.get("/deploy/frontend")
 def deploy_backend(verify: VerifyDep):
+    print("Receive trigger for frontend deploy")
     if not verify:
         return "not authorized"
 
     command = "docker service update --update-delay=10s --with-registry-auth --image eguefif/grb-amateur:nginx-latest grb_nginx".split(" ")
     print("Update frontend")
-    subprocess.run(command)
-    return "ok"
+    ret = subprocess.run(command)
+    if ret.returncode == 0:
+        print("Alertsys deploy OK")
+        return "ok"
+    else:
+        print("Alertsys deploy Failure")
+        return "error"
