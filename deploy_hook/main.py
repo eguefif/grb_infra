@@ -9,9 +9,9 @@ SECRET = os.getenv("DEPLOY_SECRET")
 
 def verify_origin(
         request: Request,
-        x_signature: Annotated[Optional[str], Header()] = None
+        cf_github_signature: Annotated[Optional[str], Header()] = None
 ):
-    if x_signature == SECRET:
+    if cf_github_signature == SECRET:
         return True
     return False
 
