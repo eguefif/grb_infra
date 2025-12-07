@@ -17,7 +17,7 @@ def verify_origin(
 
 VerifyDep = Annotated[bool, Depends(verify_origin)]
 
-@app.post("/deploy/alertsys")
+@app.get("/deploy/alertsys")
 def deploy_alertsys(verify: VerifyDep):
     print("Receive trigger for alertsys deploy")
     if not verify:
@@ -27,7 +27,7 @@ def deploy_alertsys(verify: VerifyDep):
     ret = subprocess.run(command)
     handle_return(ret.returncode, "alertsys")
 
-@app.post("/deploy/backend")
+@app.get("/deploy/backend")
 def deploy_backend(verify: VerifyDep):
     print("Receive trigger for backend deploy")
     if not verify:
@@ -38,7 +38,7 @@ def deploy_backend(verify: VerifyDep):
     ret = subprocess.run(command)
     handle_return(ret.returncode, "backend")
 
-@app.post("/deploy/frontend")
+@app.get("/deploy/frontend")
 def deploy_backend(verify: VerifyDep):
     print("Receive trigger for frontend deploy")
     if not verify:
